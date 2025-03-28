@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node index.js",
-    "seed-pinecone": "node lib/seedPinecone.js"
+    "test-query": "curl -X POST -H \"Content-Type: application/json\" -d '{\"message\": \"Build a team to launch a skateboarding business, and tell me the talent gaps.\"}' http://localhost:3002/chat",
+    "dev": "node index.js"
   },
   "author": "",
   "license": "ISC",
