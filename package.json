@@ -1,0 +1,27 @@
+{
+  "name": "pinecone-testing-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js",
+    "seed-pinecone": "node lib/seedPinecone.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@pinecone-database/pinecone": "^5.1.1",
+    "axios": "^1.8.4",
+    "cli-progress": "^3.12.0",
+    "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "fs": "^0.0.1-security",
+    "openai": "^4.90.0",
+    "p-limit": "^6.2.0",
+    "pinecone-client": "^2.0.0"
+  }
+}
