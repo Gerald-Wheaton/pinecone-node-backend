@@ -1,43 +1,61 @@
-import dotenv from "dotenv"
 import express from "express"
 import cors from "cors"
-import { Pinecone } from "@pinecone-database/pinecone"
-import { generateQueryEmbedding } from "./search/generate-query-embedding.js"
+import { MongoClient } from "mongodb"
+import "./config.js"
+import callAgent from "./lib/agents/callAgent.js"
+import { parseResponse } from "./lib/agents/helpers.js"
 
-dotenv.config()
 const app = express()
+const client = new MongoClient(process.env.MONGODB_ATLAS_URI)
 
 app.use(cors())
 app.use(express.json())
 
-const pinecone = new Pinecone({ apiKey: process.env.PINECONE_API_KEY })
-
 async function startServer() {
   try {
+    await client.connect()
+    await client.db("admin").command({ ping: 1 })
+    console.log("✅ Connected to MongoDB Atlas")
+
     app.get("/", (req, res) => {
       res.send("Pinecone server")
     })
 
-    app.post("/chat", (req, res) => {
-      const { message } = req.body.message
-      console.log(`THE MESSAGE FROM NEXTJS: ${message}`)
+    app.post("/chat", async (req, res) => {
+      const { message } = req.body
+      const threadId = Date.now().toString()
 
       try {
-        const embededQuery = generateQueryEmbedding(message)
+        console.log("Calling agent")
+        const rawResponse = await callAgent(client, message, threadId)
+        const response = await parseResponse(rawResponse)
 
-        const queryResponse = pinecone.index("candidate-match").query({
-          vector: embededQuery[0],
-          topK: 10,
-          includeMetadata: true,
+        res.status(200).json({
+          status: "success",
+          message: "Message processed.",
+          result: { threadId, response },
         })
-
-        res
-          .status(200)
-          .send(
-            `NextJS asked: ${message}\n\nPinecone responded with:\n${queryResponse}`
-          )
       } catch (error) {
-        console.error("ERROR GETTING THE QUERY EMBEDDING")
+        console.error("ERROR using agent: ", error)
+      }
+    })
+
+    app.post(`/chat/:threadId`, async (req, res) => {
+      const { message } = req.body
+      const { threadId } = req.params
+
+      try {
+        console.log("Calling agent")
+        const rawResponse = await callAgent(client, message, threadId)
+        const response = await parseResponse(rawResponse)
+
+        res.status(200).json({
+          status: "success",
+          message: "Message processed.",
+          result: { threadId, response },
+        })
+      } catch (error) {
+        console.error("ERROR using agent: ", error)
       }
     })
 

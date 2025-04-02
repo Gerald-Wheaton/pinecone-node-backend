@@ -12,6 +12,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@langchain/anthropic": "^0.3.15",
+    "@langchain/community": "^0.3.38",
+    "@langchain/core": "^0.3.43",
+    "@langchain/langgraph": "^0.2.62",
+    "@langchain/langgraph-checkpoint-mongodb": "^0.0.6",
+    "@langchain/openai": "^0.5.2",
     "@pinecone-database/pinecone": "^5.1.1",
     "axios": "^1.8.4",
     "cli-progress": "^3.12.0",
@@ -20,8 +26,10 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "fs": "^0.0.1-security",
+    "mongodb": "^6.15.0",
     "openai": "^4.90.0",
     "p-limit": "^6.2.0",
-    "pinecone-client": "^2.0.0"
+    "pinecone-client": "^2.0.0",
+    "zod": "^3.24.2"
   }
 }

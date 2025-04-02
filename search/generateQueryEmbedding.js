@@ -1,7 +1,5 @@
-import dotenv from "dotenv"
+import "../config.js"
 import { Pinecone } from "@pinecone-database/pinecone"
-
-dotenv.config()
 
 const client = new Pinecone({ apiKey: process.env.PINECONE_API_KEY })
 const model = "multilingual-e5-large"
